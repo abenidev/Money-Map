@@ -1,3 +1,5 @@
+import 'package:money_map/core/models/user.dart';
+import 'package:money_map/main.dart';
 import 'package:money_map/objectbox.g.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -5,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class ObjectBoxHelper {
   ObjectBoxHelper._();
 
-  // static Box<OnboardingData> onboardingDataBox = objectbox.store.box<OnboardingData>();
+  static Box<User> usersBox = objectbox.store.box<User>();
 }
 
 class ObjectBox {

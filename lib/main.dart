@@ -8,9 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_notif_wrapper/local_notif_wrapper.dart';
+import 'package:money_map/core/constants/app_strings.dart';
 import 'package:money_map/core/services/firebase_messaging_service.dart';
 import 'package:money_map/core/services/object_box_service.dart';
-import 'package:money_map/features/home/views/pages/home_page.dart';
+import 'package:money_map/features/onboarding/viewmodel/onboarding_viewmodel.dart';
+import 'package:money_map/features/onboarding/views/pages/profile_setup_page.dart';
+import 'package:money_map/features/onboarding/views/pages/welcome_page.dart';
 import 'package:money_map/firebase_options.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:utils_wrapper/utils_wrapper.dart';
@@ -60,7 +63,7 @@ class MyApp extends ConsumerWidget {
       splitScreenMode: true,
       builder: (_, child) {
         return MaterialApp(
-          title: "Money Map",
+          title: kAppName,
           debugShowCheckedModeBanner: false,
           theme: FlexColorScheme.light(scheme: FlexScheme.blumineBlue, useMaterial3: true, fontFamily: 'Poppins').toTheme,
           darkTheme: FlexColorScheme.dark(scheme: FlexScheme.blumineBlue, useMaterial3: true, fontFamily: 'Poppins').toTheme,
@@ -98,7 +101,7 @@ class _RootState extends ConsumerState<Root> with TickerProviderStateMixin {
 
   _init() async {
     await UtilsWrapper.init(
-      kAndroidAppPackageName: "dev.abeni.money_map",
+      kAndroidAppPackageName: kAppAndroidPackageName,
       // kIosAppBundleId: "kIosBundleId",
       initUnityAds: false,
     );
@@ -106,7 +109,11 @@ class _RootState extends ConsumerState<Root> with TickerProviderStateMixin {
     await FirebaseMessagingService.initNotifications();
 
     if (mounted) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      if (!ref.read(onboardingViewmodelNotifierProvider.notifier).getIsWelcomeViewedVal()) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WelcomePage()));
+        return;
+      }
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfileSetupPage()));
     }
   }
 
