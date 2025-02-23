@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 3418106146812973871),
       name: 'User',
-      lastPropertyId: const obx_int.IdUid(6, 8230753628835862739),
+      lastPropertyId: const obx_int.IdUid(7, 4318432535079560026),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -54,6 +54,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(6, 8230753628835862739),
             name: 'updatedAt',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 4318432535079560026),
+            name: 'budgetCycle',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -120,13 +125,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nameOffset = fbb.writeString(object.name);
           final currencyOffset = fbb.writeString(object.currency);
           final profilePicOffset = fbb.writeString(object.profilePic);
-          fbb.startTable(7);
+          final budgetCycleOffset = fbb.writeString(object.budgetCycle);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, currencyOffset);
           fbb.addOffset(3, profilePicOffset);
           fbb.addInt64(4, object.createdAt.millisecondsSinceEpoch);
           fbb.addInt64(5, object.updatedAt.millisecondsSinceEpoch);
+          fbb.addOffset(6, budgetCycleOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -141,6 +148,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 8, '');
           final profilePicParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 10, '');
+          final budgetCycleParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 16, '');
           final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
           final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
@@ -150,6 +160,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               name: nameParam,
               currency: currencyParam,
               profilePic: profilePicParam,
+              budgetCycle: budgetCycleParam,
               createdAt: createdAtParam,
               updatedAt: updatedAtParam);
 
@@ -183,4 +194,8 @@ class User_ {
   /// See [User.updatedAt].
   static final updatedAt =
       obx.QueryDateProperty<User>(_entities[0].properties[5]);
+
+  /// See [User.budgetCycle].
+  static final budgetCycle =
+      obx.QueryStringProperty<User>(_entities[0].properties[6]);
 }

@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -8,6 +10,7 @@ class User {
   String name;
   String currency;
   String profilePic;
+  String budgetCycle;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -16,6 +19,7 @@ class User {
     required this.name,
     required this.currency,
     required this.profilePic,
+    required this.budgetCycle,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -25,6 +29,7 @@ class User {
     String? name,
     String? currency,
     String? profilePic,
+    String? budgetCycle,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -33,6 +38,7 @@ class User {
       name: name ?? this.name,
       currency: currency ?? this.currency,
       profilePic: profilePic ?? this.profilePic,
+      budgetCycle: budgetCycle ?? this.budgetCycle,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -44,6 +50,7 @@ class User {
       'name': name,
       'currency': currency,
       'profilePic': profilePic,
+      'budgetCycle': budgetCycle,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
@@ -55,6 +62,7 @@ class User {
       name: map['name'] as String,
       currency: map['currency'] as String,
       profilePic: map['profilePic'] as String,
+      budgetCycle: map['budgetCycle'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
     );
@@ -66,18 +74,24 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, currency: $currency, profilePic: $profilePic, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'User(id: $id, name: $name, currency: $currency, profilePic: $profilePic, budgetCycle: $budgetCycle, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
   bool operator ==(covariant User other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.name == name && other.currency == currency && other.profilePic == profilePic && other.createdAt == createdAt && other.updatedAt == updatedAt;
+    return other.id == id &&
+        other.name == name &&
+        other.currency == currency &&
+        other.profilePic == profilePic &&
+        other.budgetCycle == budgetCycle &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ currency.hashCode ^ profilePic.hashCode ^ createdAt.hashCode ^ updatedAt.hashCode;
+    return id.hashCode ^ name.hashCode ^ currency.hashCode ^ profilePic.hashCode ^ budgetCycle.hashCode ^ createdAt.hashCode ^ updatedAt.hashCode;
   }
 }

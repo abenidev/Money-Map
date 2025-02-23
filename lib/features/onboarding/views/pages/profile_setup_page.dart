@@ -3,9 +3,21 @@ import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:money_map/core/constants/app_strings.dart';
+import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/utils/app_utils.dart';
 import 'package:money_map/core/widgets/custom_elevated_btn.dart';
 import 'package:money_map/core/widgets/custom_option_btn.dart';
+import 'package:money_map/features/home/views/pages/home_page.dart';
+import 'package:money_map/features/onboarding/viewmodel/onboarding_viewmodel.dart';
+
+final selectedCurrencyProvider = StateProvider<String>((ref) {
+  return kEtbCurrency;
+});
+
+final selectedBudgetCycleProvider = StateProvider<String>((ref) {
+  return kMonthlyBudgetCycle;
+});
 
 class ProfileSetupPage extends ConsumerStatefulWidget {
   const ProfileSetupPage({super.key});
@@ -17,6 +29,9 @@ class ProfileSetupPage extends ConsumerStatefulWidget {
 class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
   @override
   Widget build(BuildContext context) {
+    String selectedCurrency = ref.watch(selectedCurrencyProvider);
+    String selectedBudgetCycle = ref.watch(selectedBudgetCycleProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -66,57 +81,70 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
                 DropDownState<String>(
                   dropDown: DropDown<String>(
                     data: <SelectedListItem<String>>[
-                      SelectedListItem<String>(data: 'Tokyo'),
-                      SelectedListItem<String>(data: 'New York'),
-                      SelectedListItem<String>(data: 'London'),
+                      SelectedListItem<String>(data: kEtbCurrency),
+                      SelectedListItem<String>(data: kUsdCurrency),
                     ],
                     onSelected: (selectedItems) {
-                      List<String> list = [];
-                      for (var item in selectedItems) {
-                        list.add(item.data);
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            list.toString(),
-                          ),
-                        ),
-                      );
+                      String selectedVal = selectedItems[0].data.toString();
+                      ref.read(selectedCurrencyProvider.notifier).state = selectedVal;
                     },
                   ),
                 ).showModal(context);
               },
               child: Text(
-                'ETB (Ethiopian Birr)',
+                selectedCurrency,
                 style: TextStyle(fontSize: 12.sp),
-              ),
-            ),
-            sh(15),
-            Text('Income Source', style: TextStyle(fontSize: 12.sp)),
-            sh(10),
-            CustomOptionBtn(
-              onTap: () {},
-              child: Center(
-                child: Text(
-                  '+',
-                  style: TextStyle(fontSize: 22.sp),
-                ),
               ),
             ),
             sh(15),
             Text('Budget Cycle', style: TextStyle(fontSize: 12.sp)),
             sh(10),
             CustomOptionBtn(
-              onTap: () {},
+              onTap: () {
+                DropDownState<String>(
+                  dropDown: DropDown<String>(
+                    data: [
+                      SelectedListItem<String>(data: kMonthlyBudgetCycle),
+                      SelectedListItem<String>(data: kWeeklyBudgetCycle),
+                    ],
+                    onSelected: (selectedItems) {
+                      String selectedVal = selectedItems[0].data.toString();
+                      ref.read(selectedBudgetCycleProvider.notifier).state = selectedVal;
+                    },
+                  ),
+                ).showModal(context);
+              },
               child: Text(
-                'Monthly',
+                selectedBudgetCycle,
                 style: TextStyle(fontSize: 12.sp),
               ),
             ),
+            // sh(15),
+            // Text('Income Source', style: TextStyle(fontSize: 12.sp)),
+            // sh(10),
+            // CustomOptionBtn(
+            //   onTap: () {},
+            //   child: Center(
+            //     child: Text(
+            //       '+',
+            //       style: TextStyle(fontSize: 22.sp),
+            //     ),
+            //   ),
+            // ),
             Spacer(),
             CustomElevatedBtn(
               onTap: () {
-                //
+                DateTime now = DateTime.now();
+                User newUser = User(
+                  name: '',
+                  currency: selectedCurrency,
+                  profilePic: '',
+                  budgetCycle: selectedBudgetCycle,
+                  createdAt: now,
+                  updatedAt: now,
+                );
+                ref.read(onboardingViewmodelNotifierProvider.notifier).addNewUserToBox(newUser);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
               },
               title: 'Continue',
             ),
