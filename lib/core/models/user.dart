@@ -12,6 +12,10 @@ class User {
   String budgetCycle;
   DateTime createdAt;
   DateTime updatedAt;
+  double needsPercentage;
+  double wantsPercentage;
+  double savingsPercentage;
+  double tithePercentage;
 
   User({
     this.id = 0,
@@ -19,9 +23,14 @@ class User {
     required this.currency,
     required this.profilePic,
     required this.budgetCycle,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.needsPercentage = 5,
+    this.wantsPercentage = 5,
+    this.savingsPercentage = 80,
+    this.tithePercentage = 10,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   @Backlink('user')
   ToMany<Account> accounts = ToMany<Account>();

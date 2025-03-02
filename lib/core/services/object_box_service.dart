@@ -1,3 +1,6 @@
+import 'package:money_map/core/models/account.dart';
+import 'package:money_map/core/models/category.dart';
+import 'package:money_map/core/models/transaction.dart';
 import 'package:money_map/core/models/user.dart';
 import 'package:money_map/main.dart';
 import 'package:money_map/objectbox.g.dart';
@@ -8,6 +11,10 @@ class ObjectBoxHelper {
   ObjectBoxHelper._();
 
   static Box<User> usersBox = objectbox.store.box<User>();
+  static Box<Account> accountsBox = objectbox.store.box<Account>();
+  //
+  static Box<Category> categoriesBox = objectbox.store.box<Category>();
+  static Box<Transaction> transactionsBox = objectbox.store.box<Transaction>();
 }
 
 class ObjectBox {

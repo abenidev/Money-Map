@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:3418106146812973871",
-      "lastPropertyId": "7:4318432535079560026",
+      "lastPropertyId": "11:4608715302401868430",
       "name": "User",
       "properties": [
         {
@@ -43,6 +43,26 @@
           "id": "7:4318432535079560026",
           "name": "budgetCycle",
           "type": 9
+        },
+        {
+          "id": "8:401804345537492309",
+          "name": "needsPercentage",
+          "type": 8
+        },
+        {
+          "id": "9:71765311526641847",
+          "name": "wantsPercentage",
+          "type": 8
+        },
+        {
+          "id": "10:3630298498481121574",
+          "name": "savingsPercentage",
+          "type": 8
+        },
+        {
+          "id": "11:4608715302401868430",
+          "name": "tithePercentage",
+          "type": 8
         }
       ],
       "relations": []
@@ -103,10 +123,99 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:885506330367083336",
+      "lastPropertyId": "5:473926399118509080",
+      "name": "Category",
+      "properties": [
+        {
+          "id": "1:4054988949544800267",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3611487511213033372",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9148605824592304359",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "4:5699957028260544790",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "5:473926399118509080",
+          "name": "updatedAt",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:3828346058160973516",
+      "lastPropertyId": "8:7091711580254900136",
+      "name": "Transaction",
+      "properties": [
+        {
+          "id": "1:5214966257979984785",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1397893492406729825",
+          "name": "amount",
+          "type": 8
+        },
+        {
+          "id": "3:5124123274508277558",
+          "name": "transactionType",
+          "type": 9
+        },
+        {
+          "id": "4:2819072256686865054",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:745720268621348492",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "6:6965220737937897173",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "7:3142214468801493137",
+          "name": "accountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:8381996950681623105",
+          "relationTarget": "Account"
+        },
+        {
+          "id": "8:7091711580254900136",
+          "name": "categoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:8723473141310663705",
+          "relationTarget": "Category"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:2658855709596916534",
-  "lastIndexId": "1:7348238769717520346",
+  "lastEntityId": "4:3828346058160973516",
+  "lastIndexId": "3:8723473141310663705",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

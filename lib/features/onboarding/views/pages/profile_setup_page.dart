@@ -134,16 +134,13 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
             Spacer(),
             CustomElevatedBtn(
               onTap: () {
-                DateTime now = DateTime.now();
                 User newUser = User(
                   name: '',
                   currency: selectedCurrency,
                   profilePic: '',
                   budgetCycle: selectedBudgetCycle,
-                  createdAt: now,
-                  updatedAt: now,
                 );
-                ref.read(onboardingViewmodelNotifierProvider.notifier).addNewUserToBox(newUser);
+                ref.read(onboardingViewmodelNotifierProvider.notifier).addNewUserToBox(newUser, loadDefaultCategories: true);
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
               },
               title: 'Continue',

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:objectbox/objectbox.dart';
 import 'package:money_map/core/constants/app_enums/account_type.dart';
+import 'package:money_map/core/models/transaction.dart';
 import 'package:money_map/core/models/user.dart';
 
 @Entity()
@@ -29,6 +30,8 @@ class Account {
         accountType = accountType ?? AccountType.personal.name;
 
   ToOne<User> user = ToOne<User>();
+  @Backlink('account')
+  ToMany<Transaction> transactions = ToMany<Transaction>();
 
   Account copyWith({
     int? id,
