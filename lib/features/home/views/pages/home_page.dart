@@ -106,6 +106,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         decoration: const BoxDecoration(),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             sh(10),
             Row(
@@ -119,7 +120,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 SizedBox(width: 5.w),
                 Text('Br', style: TextStyle(fontSize: 12.sp)),
               ],
-            )
+            ),
+            sh(10),
+            Text('Transactions (${getFormatedDate(now, format: 'MMM')})', style: TextStyle(fontSize: 12.sp)),
+            sh(5),
           ],
         ),
       ),

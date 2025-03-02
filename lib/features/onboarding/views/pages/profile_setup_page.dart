@@ -3,7 +3,8 @@ import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:money_map/core/constants/app_strings.dart';
+import 'package:money_map/core/constants/app_enums/budget_cycle.dart';
+import 'package:money_map/core/constants/app_enums/currency_type.dart';
 import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/utils/app_utils.dart';
 import 'package:money_map/core/widgets/custom_elevated_btn.dart';
@@ -12,11 +13,11 @@ import 'package:money_map/features/home/views/pages/home_page.dart';
 import 'package:money_map/features/onboarding/viewmodel/onboarding_viewmodel.dart';
 
 final selectedCurrencyProvider = StateProvider<String>((ref) {
-  return kEtbCurrency;
+  return CurrencyType.etb.name;
 });
 
 final selectedBudgetCycleProvider = StateProvider<String>((ref) {
-  return kMonthlyBudgetCycle;
+  return BudgetCycle.monthly.name;
 });
 
 class ProfileSetupPage extends ConsumerStatefulWidget {
@@ -81,8 +82,8 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
                 DropDownState<String>(
                   dropDown: DropDown<String>(
                     data: <SelectedListItem<String>>[
-                      SelectedListItem<String>(data: kEtbCurrency),
-                      SelectedListItem<String>(data: kUsdCurrency),
+                      SelectedListItem<String>(data: CurrencyType.etb.name),
+                      SelectedListItem<String>(data: CurrencyType.usd.name),
                     ],
                     onSelected: (selectedItems) {
                       String selectedVal = selectedItems[0].data.toString();
@@ -104,8 +105,8 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
                 DropDownState<String>(
                   dropDown: DropDown<String>(
                     data: [
-                      SelectedListItem<String>(data: kMonthlyBudgetCycle),
-                      SelectedListItem<String>(data: kWeeklyBudgetCycle),
+                      SelectedListItem<String>(data: BudgetCycle.monthly.name),
+                      SelectedListItem<String>(data: BudgetCycle.weekly.name),
                     ],
                     onSelected: (selectedItems) {
                       String selectedVal = selectedItems[0].data.toString();

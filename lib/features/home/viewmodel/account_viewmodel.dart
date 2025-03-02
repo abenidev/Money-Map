@@ -23,6 +23,14 @@ class AccountViewmodelNotifier extends StateNotifier<List<Account>> {
     return accountLocalRepository.getAllAccounts();
   }
 
+  Account? getAccountById(int id) {
+    return accountLocalRepository.getAccountById(id);
+  }
+
+  Account getDefaultAccount() {
+    return accountLocalRepository.getDefaultAccount();
+  }
+
   void updateAccountBalance(int id, double balance) {
     accountLocalRepository.updateAccountBalance(id, balance);
     updateAccountsState();

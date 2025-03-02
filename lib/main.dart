@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_notif_wrapper/local_notif_wrapper.dart';
+import 'package:logger/logger.dart';
 import 'package:money_map/core/constants/app_strings.dart';
 import 'package:money_map/core/services/firebase_messaging_service.dart';
 import 'package:money_map/core/services/object_box_service.dart';
@@ -20,6 +21,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:utils_wrapper/utils_wrapper.dart';
 
 late ObjectBox objectbox;
+Logger logger = Logger();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
