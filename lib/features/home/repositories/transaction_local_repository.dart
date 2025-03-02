@@ -75,4 +75,8 @@ class TransactionLocalRepository {
     account.transactions.add(newTransaction);
     ObjectBoxHelper.transactionsBox.put(newTransaction);
   }
+
+  void removeTransaction(Transaction transaction) {
+    ObjectBoxHelper.transactionsBox.remove(transaction.id);
+  }
 }

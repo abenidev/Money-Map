@@ -81,4 +81,20 @@ class TransactionViewmodelNotifier extends StateNotifier<List<Transaction>> {
     updateCurrentMonthTransactionsListState();
     homeViewmodelNotifier.updateUserStateFromBox();
   }
+
+  void removeTransaction(Transaction transaction) {
+    if (transaction.account.target == null) throw Exception('Account target is null!');
+    Account account = transaction.account.target!;
+
+    double balance = account.balance;
+    if (transaction.transactionType.toTransactionType == TransactionType.expense) {
+      balance = balance + transaction.amount;
+    } else if (transaction.transactionType.toTransactionType == TransactionType.income) {
+      balance = balance - transaction.amount;
+    }
+    accountViewmodelNotifier.updateAccountBalance(transaction.account.target!.id, balance);
+    transactionLocalRepository.removeTransaction(transaction);
+    updateCurrentMonthTransactionsListState();
+    homeViewmodelNotifier.updateUserStateFromBox();
+  }
 }

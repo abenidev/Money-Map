@@ -153,6 +153,36 @@ class _HomePageState extends ConsumerState<HomePage> {
                     padding: isLastItem ? EdgeInsets.only(bottom: 70.h) : EdgeInsets.zero,
                     child: ListTile(
                       onTap: () {},
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Delete Transaction', style: TextStyle(fontSize: 14.sp)),
+                              content: Text('Are you sure you want to delete transaction?', style: TextStyle(fontSize: 12.sp)),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    'No',
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    ref.read(transactionViewmodelProvider.notifier).removeTransaction(transaction);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Yes',
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       title: Text(
                         'Br. ${getCurrencyFormatedStr(transaction.amount)}',
                         style: TextStyle(fontSize: 14.sp),
