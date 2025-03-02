@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'core/models/account.dart';
 import 'core/models/user.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -62,6 +63,65 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(
+            name: 'accounts', srcEntity: 'Account', srcField: 'user')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(2, 2658855709596916534),
+      name: 'Account',
+      lastPropertyId: const obx_int.IdUid(9, 805185011390087823),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4852170801278241072),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 4150410269983528397),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 8738536959257771449),
+            name: 'isDefault',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 6925510193148370399),
+            name: 'accountType',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 6307814032758525352),
+            name: 'balance',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 4848330234307195823),
+            name: 'currency',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 9021542675674244993),
+            name: 'createdAt',
+            type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 3683633366337763889),
+            name: 'updatedAt',
+            type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 805185011390087823),
+            name: 'userId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(1, 7348238769717520346),
+            relationTarget: 'User')
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -100,8 +160,8 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 3418106146812973871),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(2, 2658855709596916534),
+      lastIndexId: const obx_int.IdUid(1, 7348238769717520346),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
@@ -116,7 +176,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
     User: obx_int.EntityDefinition<User>(
         model: _entities[0],
         toOneRelations: (User object) => [],
-        toManyRelations: (User object) => {},
+        toManyRelations: (User object) => {
+              obx_int.RelInfo<Account>.toOneBacklink(
+                      9, object.id, (Account srcObject) => srcObject.user):
+                  object.accounts
+            },
         getId: (User object) => object.id,
         setId: (User object, int id) {
           object.id = id;
@@ -163,7 +227,70 @@ obx_int.ModelDefinition getObjectBoxModel() {
               budgetCycle: budgetCycleParam,
               createdAt: createdAtParam,
               updatedAt: updatedAtParam);
-
+          obx_int.InternalToManyAccess.setRelInfo<User>(
+              object.accounts,
+              store,
+              obx_int.RelInfo<Account>.toOneBacklink(
+                  9, object.id, (Account srcObject) => srcObject.user));
+          return object;
+        }),
+    Account: obx_int.EntityDefinition<Account>(
+        model: _entities[1],
+        toOneRelations: (Account object) => [object.user],
+        toManyRelations: (Account object) => {},
+        getId: (Account object) => object.id,
+        setId: (Account object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Account object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          final accountTypeOffset = fbb.writeString(object.accountType);
+          final currencyOffset = fbb.writeString(object.currency);
+          fbb.startTable(10);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addBool(2, object.isDefault);
+          fbb.addOffset(3, accountTypeOffset);
+          fbb.addFloat64(4, object.balance);
+          fbb.addOffset(5, currencyOffset);
+          fbb.addInt64(6, object.createdAt.millisecondsSinceEpoch);
+          fbb.addInt64(7, object.updatedAt.millisecondsSinceEpoch);
+          fbb.addInt64(8, object.user.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final isDefaultParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+          final accountTypeParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 10, '');
+          final balanceParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final currencyParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 14, '');
+          final createdAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0));
+          final updatedAtParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0));
+          final object = Account(
+              id: idParam,
+              name: nameParam,
+              isDefault: isDefaultParam,
+              accountType: accountTypeParam,
+              balance: balanceParam,
+              currency: currencyParam,
+              createdAt: createdAtParam,
+              updatedAt: updatedAtParam);
+          object.user.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          object.user.attach(store);
           return object;
         })
   };
@@ -198,4 +325,46 @@ class User_ {
   /// See [User.budgetCycle].
   static final budgetCycle =
       obx.QueryStringProperty<User>(_entities[0].properties[6]);
+
+  /// see [User.accounts]
+  static final accounts = obx.QueryBacklinkToMany<Account, User>(Account_.user);
+}
+
+/// [Account] entity fields to define ObjectBox queries.
+class Account_ {
+  /// See [Account.id].
+  static final id =
+      obx.QueryIntegerProperty<Account>(_entities[1].properties[0]);
+
+  /// See [Account.name].
+  static final name =
+      obx.QueryStringProperty<Account>(_entities[1].properties[1]);
+
+  /// See [Account.isDefault].
+  static final isDefault =
+      obx.QueryBooleanProperty<Account>(_entities[1].properties[2]);
+
+  /// See [Account.accountType].
+  static final accountType =
+      obx.QueryStringProperty<Account>(_entities[1].properties[3]);
+
+  /// See [Account.balance].
+  static final balance =
+      obx.QueryDoubleProperty<Account>(_entities[1].properties[4]);
+
+  /// See [Account.currency].
+  static final currency =
+      obx.QueryStringProperty<Account>(_entities[1].properties[5]);
+
+  /// See [Account.createdAt].
+  static final createdAt =
+      obx.QueryDateProperty<Account>(_entities[1].properties[6]);
+
+  /// See [Account.updatedAt].
+  static final updatedAt =
+      obx.QueryDateProperty<Account>(_entities[1].properties[7]);
+
+  /// See [Account.user].
+  static final user =
+      obx.QueryRelationToOne<Account, User>(_entities[1].properties[8]);
 }

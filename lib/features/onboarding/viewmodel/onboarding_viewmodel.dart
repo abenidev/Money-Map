@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:money_map/core/models/account.dart';
 import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/services/object_box_service.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -23,6 +24,9 @@ class OnboardingViewmodelNotifier extends StateNotifier<void> {
   }
 
   addNewUserToBox(User newUser) {
+    Account newAccount = Account(name: 'Default', currency: newUser.currency);
+    newAccount.user.target = newUser;
+    newUser.accounts.add(newAccount);
     ObjectBoxHelper.usersBox.put(newUser);
   }
 }

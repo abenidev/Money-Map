@@ -46,10 +46,67 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:2658855709596916534",
+      "lastPropertyId": "9:805185011390087823",
+      "name": "Account",
+      "properties": [
+        {
+          "id": "1:4852170801278241072",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4150410269983528397",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:8738536959257771449",
+          "name": "isDefault",
+          "type": 1
+        },
+        {
+          "id": "4:6925510193148370399",
+          "name": "accountType",
+          "type": 9
+        },
+        {
+          "id": "5:6307814032758525352",
+          "name": "balance",
+          "type": 8
+        },
+        {
+          "id": "6:4848330234307195823",
+          "name": "currency",
+          "type": 9
+        },
+        {
+          "id": "7:9021542675674244993",
+          "name": "createdAt",
+          "type": 10
+        },
+        {
+          "id": "8:3683633366337763889",
+          "name": "updatedAt",
+          "type": 10
+        },
+        {
+          "id": "9:805185011390087823",
+          "name": "userId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:7348238769717520346",
+          "relationTarget": "User"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:3418106146812973871",
-  "lastIndexId": "0:0",
+  "lastEntityId": "2:2658855709596916534",
+  "lastIndexId": "1:7348238769717520346",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

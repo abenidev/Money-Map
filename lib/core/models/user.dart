@@ -1,6 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
+import 'package:money_map/core/models/account.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -23,6 +22,9 @@ class User {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  @Backlink('user')
+  ToMany<Account> accounts = ToMany<Account>();
 
   User copyWith({
     int? id,
