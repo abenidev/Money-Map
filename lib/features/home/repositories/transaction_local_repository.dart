@@ -29,6 +29,20 @@ class TransactionLocalRepository {
     return ObjectBoxHelper.transactionsBox.getAll();
   }
 
+  List<Transaction> getIncomeTransactions() {
+    Query<Transaction> builder = ObjectBoxHelper.transactionsBox.query(Transaction_.transactionType.equals(TransactionType.income.name)).build();
+    List<Transaction> transactions = builder.find();
+    builder.close();
+    return transactions;
+  }
+
+  List<Transaction> getExpenseTransactions() {
+    Query<Transaction> builder = ObjectBoxHelper.transactionsBox.query(Transaction_.transactionType.equals(TransactionType.expense.name)).build();
+    List<Transaction> transactions = builder.find();
+    builder.close();
+    return transactions;
+  }
+
   List<Transaction> getCurrentMonthTransactions() {
     DateTime now = DateTime.now();
     // Get the first and last day of the current month

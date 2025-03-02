@@ -13,6 +13,8 @@ import 'package:money_map/features/home/viewmodel/home_viewmodel.dart';
 import 'package:money_map/features/home/viewmodel/transaction_viewmodel.dart';
 import 'package:money_map/features/home/views/pages/expense_add_page.dart';
 import 'package:money_map/features/home/views/pages/income_add_page.dart';
+import 'package:money_map/features/home/views/pages/setting_page.dart';
+import 'package:money_map/features/home/views/widgets/amount_widget.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -58,7 +60,9 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingPage()));
+            },
             icon: Icon(Icons.settings, size: 22.w),
           ),
         ],
@@ -112,17 +116,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             sh(10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    getCurrencyFormatedStr(currentUser.accounts.first.balance),
-                    style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 5.w),
-                  Text('Br', style: TextStyle(fontSize: 12.sp)),
-                ],
+              child: AmountWidget(
+                amount: getCurrencyFormatedStr(currentUser.accounts.first.balance),
+                amountFontSize: 26.sp,
               ),
             ),
             sh(10),
@@ -149,9 +145,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   );
                 },
-                // groupSeparatorBuilder: (DateTime groupByValue) {
-                //   return Text(getFormatedDate(groupByValue, format: 'EEEE, MMM d'), style: TextStyle(fontSize: 12.sp));
-                // },
                 itemBuilder: (context, Transaction transaction) {
                   int lastItemIndex = currentMonthTransactions.indexOf(transaction);
                   bool isLastItem = lastItemIndex == 0;

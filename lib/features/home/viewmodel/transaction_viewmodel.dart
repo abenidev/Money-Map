@@ -37,6 +37,26 @@ class TransactionViewmodelNotifier extends StateNotifier<List<Transaction>> {
     return transactionLocalRepository.getAllTransactions();
   }
 
+  List<Transaction> getIncomeTransactions() {
+    return transactionLocalRepository.getIncomeTransactions();
+  }
+
+  List<Transaction> getExpenseTransactions() {
+    return transactionLocalRepository.getExpenseTransactions();
+  }
+
+  double getTotalIncomeAmount() {
+    List<Transaction> incomeTransactions = getIncomeTransactions();
+    double total = incomeTransactions.fold(0.0, (sum, trx) => sum + trx.amount);
+    return total;
+  }
+
+  double getTotalExpenseAmount() {
+    List<Transaction> expenseTransactions = getExpenseTransactions();
+    double total = expenseTransactions.fold(0.0, (sum, trx) => sum + trx.amount);
+    return total;
+  }
+
   void addTransaction(
     double amount,
     String? description,
