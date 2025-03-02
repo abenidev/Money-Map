@@ -5,22 +5,27 @@ import 'package:money_map/core/models/category.dart';
 import 'package:money_map/core/models/transaction.dart';
 import 'package:money_map/features/home/repositories/transaction_local_repository.dart';
 import 'package:money_map/features/home/viewmodel/account_viewmodel.dart';
+import 'package:money_map/features/home/viewmodel/home_viewmodel.dart';
 
 final transactionViewmodelProvider = StateNotifierProvider<TransactionViewmodelNotifier, List<Transaction>>((ref) {
   final transactionLocalRepository = ref.watch(transactionLocalRepositoryProvider);
   final accountViewmodelNotifier = ref.watch(accountViewmodelProvider.notifier);
+  final homeViewmodelNotifier = ref.watch(homeViewModelProvider.notifier);
   return TransactionViewmodelNotifier(
     transactionLocalRepository: transactionLocalRepository,
     accountViewmodelNotifier: accountViewmodelNotifier,
+    homeViewmodelNotifier: homeViewmodelNotifier,
   );
 });
 
 class TransactionViewmodelNotifier extends StateNotifier<List<Transaction>> {
   TransactionLocalRepository transactionLocalRepository;
   AccountViewmodelNotifier accountViewmodelNotifier;
+  HomeViewmodelNotifier homeViewmodelNotifier;
   TransactionViewmodelNotifier({
     required this.transactionLocalRepository,
     required this.accountViewmodelNotifier,
+    required this.homeViewmodelNotifier,
   }) : super([]);
 
   void updateCurrentMonthTransactionsListState() {
@@ -46,15 +51,14 @@ class TransactionViewmodelNotifier extends StateNotifier<List<Transaction>> {
       category,
       account,
     );
-
+    double balance = account.balance;
     if (transactionType == TransactionType.expense) {
-      double balance = account.balance - amount;
-      accountViewmodelNotifier.updateAccountBalance(account.id, balance);
+      balance = balance - amount;
     } else if (transactionType == TransactionType.income) {
-      double balance = account.balance + amount;
-      accountViewmodelNotifier.updateAccountBalance(account.id, balance);
+      balance = balance + amount;
     }
-
+    accountViewmodelNotifier.updateAccountBalance(account.id, balance);
     updateCurrentMonthTransactionsListState();
+    homeViewmodelNotifier.updateUserStateFromBox();
   }
 }
