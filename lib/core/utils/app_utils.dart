@@ -74,6 +74,11 @@ DateTime convertSleepMinutesToDateTime(int minutes) {
   return DateTime(now.year, now.month, now.day, hours, mins);
 }
 
+String getCurrencyFormatedStr(double amount) {
+  String formattedAmount = NumberFormat.currency(locale: 'en_US', symbol: '').format(amount);
+  return formattedAmount;
+}
+
 String formatTo12Hour(int hours, int minutes, {bool showTimeOnly = false, bool showPeriodOnly = false}) {
   // Validate input
   if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {

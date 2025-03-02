@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:money_map/core/models/category.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:money_map/core/constants/app_enums/transaction_type.dart';
 import 'package:money_map/core/models/transaction.dart';
 import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/utils/app_utils.dart';
@@ -37,6 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // bool isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
     User? currentUser = ref.watch(homeViewModelProvider);
     List<Transaction> currentMonthTransactions = ref.watch(transactionViewmodelProvider);
 
@@ -103,27 +105,88 @@ class _HomePageState extends ConsumerState<HomePage> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
         decoration: const BoxDecoration(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             sh(10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  currentUser.accounts.first.balance.toStringAsFixed(2),
-                  style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(width: 5.w),
-                Text('Br', style: TextStyle(fontSize: 12.sp)),
-              ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    getCurrencyFormatedStr(currentUser.accounts.first.balance),
+                    style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 5.w),
+                  Text('Br', style: TextStyle(fontSize: 12.sp)),
+                ],
+              ),
             ),
             sh(10),
-            Text('Transactions (${getFormatedDate(now, format: 'MMM')})', style: TextStyle(fontSize: 12.sp)),
-            sh(5),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Text('Transactions (${getFormatedDate(now, format: 'MMM')})', style: TextStyle(fontSize: 12.sp)),
+            ),
+            sh(15),
+            Expanded(
+              child: GroupedListView<Transaction, int>(
+                elements: currentMonthTransactions,
+                groupBy: (transaction) => transaction.createdAt.day,
+                groupHeaderBuilder: (transaction) {
+                  return Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(getFormatedDate(transaction.createdAt, format: 'EEEE, MMM d'), style: TextStyle(fontSize: 12.sp)),
+                      ],
+                    ),
+                  );
+                },
+                // groupSeparatorBuilder: (DateTime groupByValue) {
+                //   return Text(getFormatedDate(groupByValue, format: 'EEEE, MMM d'), style: TextStyle(fontSize: 12.sp));
+                // },
+                itemBuilder: (context, Transaction transaction) {
+                  int lastItemIndex = currentMonthTransactions.indexOf(transaction);
+                  bool isLastItem = lastItemIndex == 0;
+
+                  return Padding(
+                    padding: isLastItem ? EdgeInsets.only(bottom: 70.h) : EdgeInsets.zero,
+                    child: ListTile(
+                      onTap: () {},
+                      title: Text(
+                        'Br. ${getCurrencyFormatedStr(transaction.amount)}',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                      subtitle: Text(
+                        '${transaction.category.target?.name}',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                      leading: Icon(
+                        transaction.transactionType.toTransactionType == TransactionType.expense ? Icons.money_off : Icons.money,
+                        color: transaction.transactionType.toTransactionType == TransactionType.expense ? Colors.red : Colors.green.shade900,
+                        size: 24.w,
+                      ),
+                      trailing: Text(
+                        formatTo12Hour(transaction.createdAt.hour, transaction.createdAt.minute),
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    ),
+                  );
+                },
+                itemComparator: (item1, item2) => item1.createdAt.compareTo(item2.createdAt),
+                useStickyGroupSeparators: true, // optional
+                floatingHeader: true, // optional
+                order: GroupedListOrder.DESC, // optional
+                // footer: Text("Widget at the bottom of list"), // optional
+              ),
+            ),
           ],
         ),
       ),

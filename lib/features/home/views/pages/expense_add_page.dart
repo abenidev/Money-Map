@@ -179,7 +179,7 @@ class _ExpenseAddPageState extends ConsumerState<ExpenseAddPage> {
                         onPressed: () {
                           if (formKey.currentState?.validate() ?? false) {
                             try {
-                              double enteredAmount = double.parse(_amountController.text.trim().replaceAll(currencySymbol, ''));
+                              double enteredAmount = double.parse(_amountController.text.trim().replaceAll(currencySymbol, '').replaceAll(',', ''));
                               String desc = _descriptionController.text.trim();
                               logger.i(enteredAmount);
                               ref.read(transactionViewmodelProvider.notifier).addTransaction(
