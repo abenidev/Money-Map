@@ -7,15 +7,11 @@ import 'package:money_map/core/constants/app_enums/transaction_type.dart';
 import 'package:money_map/core/models/transaction.dart';
 import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/utils/app_utils.dart';
-import 'package:money_map/features/home/viewmodel/account_viewmodel.dart';
-import 'package:money_map/features/home/viewmodel/categories_viewmodel.dart';
 import 'package:money_map/features/home/viewmodel/home_viewmodel.dart';
 import 'package:money_map/features/home/viewmodel/transaction_viewmodel.dart';
 import 'package:money_map/features/home/views/pages/expense_add_page.dart';
 import 'package:money_map/features/home/views/pages/income_add_page.dart';
-import 'package:money_map/features/home/views/pages/setting_page.dart';
 import 'package:money_map/features/home/views/widgets/amount_widget.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -28,21 +24,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   DateTime now = DateTime.now();
 
   @override
-  void initState() {
-    super.initState();
-    afterBuildCreated(() {
-      ref.read(homeViewModelProvider.notifier).updateUserStateFromBox();
-      ref.read(transactionViewmodelProvider.notifier).updateCurrentMonthTransactionsListState();
-      ref.read(categoriesViewmodelProvider.notifier).updateCategoriesState();
-      ref.read(accountViewmodelProvider.notifier).updateAccountsState();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // bool isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
     User? currentUser = ref.watch(homeViewModelProvider);
     List<Transaction> currentMonthTransactions = ref.watch(transactionViewmodelProvider);
+    double totalIncome = ref.watch(transactionViewmodelProvider.notifier).getTotalIncomeAmount();
+    double totalExpense = ref.watch(transactionViewmodelProvider.notifier).getTotalExpenseAmount();
 
     if (currentUser == null) {
       return Scaffold(
@@ -53,20 +39,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          getFormatedDate(now, format: 'EEEE, MMM d'),
-          style: TextStyle(fontSize: 16.sp),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingPage()));
-            },
-            icon: Icon(Icons.settings, size: 22.w),
-          ),
-        ],
-      ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         type: ExpandableFabType.up,
@@ -117,7 +89,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: AmountWidget(
-                amount: getCurrencyFormatedStr(currentUser.accounts.first.balance),
+                amount: getCurrencyFormatedStr(((totalIncome * ((100 - currentUser.tithePercentage) / 100)) - totalExpense)),
                 amountFontSize: 26.sp,
               ),
             ),

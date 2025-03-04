@@ -82,7 +82,6 @@ String getCurrencyFormatedStr(double amount) {
 String formatTo12Hour(int hours, int minutes, {bool showTimeOnly = false, bool showPeriodOnly = false}) {
   // Validate input
   if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-    //TODO: fix issue when hour is set 24 / 12 AM
     return '';
   }
 

@@ -9,7 +9,7 @@ import 'package:money_map/core/models/user.dart';
 import 'package:money_map/core/utils/app_utils.dart';
 import 'package:money_map/core/widgets/custom_elevated_btn.dart';
 import 'package:money_map/core/widgets/custom_option_btn.dart';
-import 'package:money_map/features/home/views/pages/home_page.dart';
+import 'package:money_map/features/home/views/pages/bnb.dart';
 import 'package:money_map/features/onboarding/viewmodel/onboarding_viewmodel.dart';
 
 final selectedCurrencyProvider = StateProvider<String>((ref) {
@@ -48,32 +48,32 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             sh(10),
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50.w,
-                    child: Icon(Icons.person_outline, size: 40.w),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          //TODO:
-                        },
-                        icon: Icon(Icons.edit, size: 18.w),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Center(
+            //   child: Stack(
+            //     children: [
+            //       CircleAvatar(
+            //         radius: 50.w,
+            //         child: Icon(Icons.person_outline, size: 40.w),
+            //       ),
+            //       Positioned(
+            //         bottom: 0,
+            //         right: 0,
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             color: Colors.orange,
+            //             shape: BoxShape.circle,
+            //           ),
+            //           child: IconButton(
+            //             onPressed: () {
+            //
+            //             },
+            //             icon: Icon(Icons.edit, size: 18.w),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             sh(15),
             Text('Currency', style: TextStyle(fontSize: 12.sp)),
             sh(10),
@@ -142,7 +142,7 @@ class _ProfileSetupPageState extends ConsumerState<ProfileSetupPage> {
                   budgetCycle: selectedBudgetCycle,
                 );
                 ref.read(onboardingViewmodelNotifierProvider.notifier).addNewUserToBox(newUser, loadDefaultCategories: true);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Bnb()));
               },
               title: 'Continue',
             ),

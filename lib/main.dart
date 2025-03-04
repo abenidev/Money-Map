@@ -12,7 +12,7 @@ import 'package:logger/logger.dart';
 import 'package:money_map/core/constants/app_strings.dart';
 import 'package:money_map/core/services/firebase_messaging_service.dart';
 import 'package:money_map/core/services/object_box_service.dart';
-import 'package:money_map/features/home/views/pages/home_page.dart';
+import 'package:money_map/features/home/views/pages/bnb.dart';
 import 'package:money_map/features/onboarding/viewmodel/onboarding_viewmodel.dart';
 import 'package:money_map/features/onboarding/views/pages/profile_setup_page.dart';
 import 'package:money_map/features/onboarding/views/pages/welcome_page.dart';
@@ -120,7 +120,7 @@ class _RootState extends ConsumerState<Root> with TickerProviderStateMixin {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProfileSetupPage()));
         return;
       }
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Bnb()));
     }
   }
 

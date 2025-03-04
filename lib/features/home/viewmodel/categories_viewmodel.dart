@@ -30,4 +30,9 @@ class CategoriesViewmodelNotifier extends StateNotifier<List<Category>> {
   List<Category> getExpenseCategories() {
     return cateogriesLocalRepository.getExpenseCategories();
   }
+
+  void addCategory(Category category) {
+    cateogriesLocalRepository.addCategory(category);
+    updateCategoriesState();
+  }
 }

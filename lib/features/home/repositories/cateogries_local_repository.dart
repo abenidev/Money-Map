@@ -29,6 +29,10 @@ class CateogriesLocalRepository {
     return categories;
   }
 
+  void addCategory(Category category) {
+    ObjectBoxHelper.categoriesBox.put(category);
+  }
+
   Category getCategoryById(int id) {
     Category? category = ObjectBoxHelper.categoriesBox.get(id);
     if (category == null) throw Exception('Category not found');
